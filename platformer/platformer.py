@@ -10,9 +10,19 @@ clock = pg.time.Clock()
 
 ground_img = pg.image.load('platformer/imgs/ground_dirt.png')
 rock_img = pg.image.load('platformer/imgs/ground_rock.png')
-player_img = pg.image.load('platformer/imgs/side.png')
 enemy_img = pg.image.load('platformer/imgs/alien_plant.png')
 key_img = pg.image.load('platformer/imgs/key_yellow.png')
+
+
+right_list = []
+left_list = []
+for i in range(1,12):
+    img = pg.image.load(f'platformer/imgs/walk000{i}.png')
+    right = pg.transform.scale(img, (PLAYER_WIDTH, PLAYER_HEIGHT))
+    left = pg.transform.flip(right, True, False)
+    right_list.append(right)
+    left_list.append(left)
+
 
 brick_list = []
 enemy_list = []
@@ -48,7 +58,7 @@ for row in range(len(LAYOUT)):
             esurfaces_list.append(barrier)
 
         elif LAYOUT[row][col] == 'p':
-            player = Player(x_loc, y_loc, PLAYER_WIDTH, PLAYER_HEIGHT, screen, player_img)
+            player = Player(x_loc, y_loc, screen, right_list, left_list)
         
         elif LAYOUT[row][col] == 'e':
             enemy_list.append(Enemy(screen, x_loc + BRICK_WIDTH - ENEMY_WIDTH, y_loc + BRICK_HEIGHT - ENEMY_WIDTH, ENEMY_WIDTH, ENEMY_HEIGHT, enemy_img))
@@ -109,7 +119,7 @@ while playing:
                     esurfaces_list.append(barrier)
 
                 elif LAYOUT2[row][col] == 'p':
-                    player = Player(x_loc, y_loc, PLAYER_WIDTH, PLAYER_HEIGHT, screen, player_img)
+                    player = Player(x_loc, y_loc, screen, right_list, left_list)
                 
                 elif LAYOUT2[row][col] == 'e':
                     enemy_list.append(Enemy(screen, x_loc + BRICK_WIDTH - ENEMY_WIDTH, y_loc + BRICK_HEIGHT - ENEMY_WIDTH, ENEMY_WIDTH, ENEMY_HEIGHT, enemy_img))
@@ -119,7 +129,7 @@ while playing:
     elif player.rect.x < 0:
         print("ggs")
 
-    screen.fill(MOON_GREY)
+    screen.fill(CAVE_GREY)
 
     for brick in brick_list:
         brick.draw_brick()

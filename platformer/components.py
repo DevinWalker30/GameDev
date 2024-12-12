@@ -5,13 +5,21 @@ import random
 
 
 class Player():
-    def __init__(self, x_loc, y_loc, width, height, display, img):
-        self.img = pg.transform.scale(img, (width-5, height+5))
+    def __init__(self, x_loc, y_loc, display, right, left):
+        self.right_list = right
+        self.left_list = left
+        self.run_right = False
+        self.run_left = False
+
+        self.current_frame = 0
+        self.delay = 50
+        self.last = pg.time.get_ticks()
+
+        self.img = self.right_list[0]
         self.rect = self.img.get_rect()
+
         self.rect.x = x_loc
         self.rect.y = y_loc
-        self.width = width
-        self.height = height
         self.display = display
         self.x_velo = 5
 
@@ -30,9 +38,30 @@ class Player():
         keys = pg.key.get_pressed()
 
         if keys[pg.K_a]:
+            # self.now = pg.time.get_ticks()
             self.x_change = -1*self.x_velo
-        if keys[pg.K_d]:
+            self.run_left = True
+            
+            # if self.now - self.last > self.delay:
+            #     self.last = self.now
+            self.current_frame = (self.current_frame + 1) % len(self.left_list)
+            self.img = self.left_list[self.current_frame]
+            
+        elif keys[pg.K_d]:
             self.x_change = self.x_velo
+            self.run_right = True
+
+            self.current_frame = (self.current_frame + 1) % len(self.right_list)
+            self.img = self.right_list[self.current_frame]
+            
+        else:
+            self.x_change = 0
+            if self.run_left:
+                self.img = self.left_list[0]
+                self.run_left = False
+            elif self.run_right:
+                self.img = self.right_list[0]
+                self.run_right = False
 
         if (keys[pg.K_SPACE] or keys[pg.K_w]) and not self.jumping and self.landed:
             self.jumping = True

@@ -12,6 +12,7 @@ PLANE_GREY = (191, 191, 191)
 PLANE_WINDOW = (1, 5, 51)
 METEOR_GREY = (201, 201, 201)
 DOOR_BROWN = (71, 30, 0)
+CAVE_GREY = (120, 115, 115)
 
 
 FPS = 60
@@ -43,7 +44,7 @@ LAYOUT2 = ['111111111111111111111',
            'l                   1',
            'l                   1',
            '111e             1111',
-           '1       111         1',
+           '1      1111         1',
            '1   1e       111   k1',
            '1                 e11',
            '111     11   1111   1',
@@ -57,7 +58,7 @@ LAYOUT2 = ['111111111111111111111',
 
 BRICK_WIDTH, BRICK_HEIGHT = 50, 40
 
-PLAYER_WIDTH, PLAYER_HEIGHT = 30, 30
+PLAYER_WIDTH, PLAYER_HEIGHT = 28, 35
 
 ENEMY_WIDTH, ENEMY_HEIGHT = 25, 25
 
