@@ -8,6 +8,10 @@ screen = pg.display.set_mode([DISPLAY_WIDTH, DISPLAY_HEIGHT])
 
 clock = pg.time.Clock()
 
+pg.font.init()
+font_gg = pg.font.SysFont('yugothic', 124, bold = True)
+gg_txt = font_gg.render('GOOD GAME!!', True, RED)
+
 ground_img = pg.image.load('platformer/imgs/ground_dirt.png')
 rock_img = pg.image.load('platformer/imgs/ground_rock.png')
 enemy_img = pg.image.load('platformer/imgs/alien_plant.png')
@@ -126,8 +130,6 @@ while playing:
 
                 elif LAYOUT2[row][col] == 'k':
                     key = Key(screen, x_loc + ENEMY_WIDTH, y_loc, ENEMY_WIDTH, ENEMY_HEIGHT, key_img)
-    elif player.rect.x < 0:
-        print("ggs")
 
     screen.fill(CAVE_GREY)
 
@@ -141,6 +143,9 @@ while playing:
     player.draw_player()
     for enemy in enemy_list:
         enemy.draw()
+
+    if player.rect.x < 0:
+        screen.blit(gg_txt, (DISPLAY_WIDTH/12, DISPLAY_HEIGHT/3))
 
     pg.display.flip()
 
