@@ -10,7 +10,7 @@ clock = pg.time.Clock()
 
 pg.font.init()
 font_gg = pg.font.SysFont('yugothic', 124, bold = True)
-gg_txt = font_gg.render('GOOD GAME!!', True, RED)
+gg_txt = font_gg.render('YOU ESCAPED!!', True, RED)
 
 ground_img = pg.image.load('platformer/imgs/ground_dirt.png')
 rock_img = pg.image.load('platformer/imgs/ground_rock.png')
@@ -145,7 +145,7 @@ while playing:
         enemy.draw()
 
     if player.rect.x < 0:
-        screen.blit(gg_txt, (DISPLAY_WIDTH/12, DISPLAY_HEIGHT/3))
+        screen.blit(gg_txt, (DISPLAY_WIDTH/28, DISPLAY_HEIGHT/3))
 
     pg.display.flip()
 
