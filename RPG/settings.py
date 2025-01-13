@@ -1,6 +1,6 @@
 FPS = 60
-WIDTH = 720
-HEIGHT = 960
+
+scale = 4
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -19,3 +19,20 @@ DOOR_BROWN = (71, 30, 0)
 CAVE_GREY = (120, 115, 115)
 
 GRAVITY = 1
+
+
+LAYOUTS = [['1111111111111111111',
+            '1gp ww g    g    g1',
+            '1   g w f         1',
+            '1  g   w  g   f   1',
+            '1    ff wwww g   g1',
+            '1 g  f   g   wf   1',
+            '1  g   g    g wg  1',
+            '1   g   g    g  w 1',
+            '1 g  g     f    w 1',
+            '1 g     g      gw 1',
+            '1   g       g  w  1',
+            '1111111111111111111']]
+
+WIDTH = (len(LAYOUTS[0][0])-3)*scale*16
+HEIGHT = (len(LAYOUTS[0])-3)*scale*16
