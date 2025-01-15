@@ -1,5 +1,5 @@
 from settings import *
-from sprites import spriteSheet
+from sprites import spriteSheet, Player
 import pygame as pg
 import math
 import random
@@ -11,12 +11,19 @@ class Game:
         pg.init()
         pg.mixer.init()
 
+
         self.screen = pg.display.set_mode([WIDTH, HEIGHT])
         self.clock = pg.time.Clock()
         self.running = True
 
         self.tilemap = spriteSheet('RPG\imgs\\tilemap.png')
         self.map_list = []
+
+        self.char_speedx = 0
+        self.char_speedy = 0
+
+        self.charx = 16*scale+16
+        self.chary = 16*scale+16
 
         self.load_imgs()
 
@@ -71,6 +78,7 @@ class Game:
         self.char_list.append(self.char_rifle)
         self.char_list.append(self.char_uzi)
 
+        self.player = Player(self.charx, self.chary, self.screen, self.char_list)
 
     def new(self):
         # create all game objects (sprites, groups)
@@ -80,7 +88,7 @@ class Game:
 
     def update(self):
         # run all updates
-        pass
+        self.player.update()
 
     def draw(self):
         # fill screen, draw objects, and flip
@@ -118,8 +126,7 @@ class Game:
                 if LAYOUTS[level_num][row][col] == 'w':
                     self.screen.blit(self.map_list[43], (x_loc, y_loc))
 
-                if LAYOUTS[level_num][row][col] == 'p':
-                    self.screen.blit(self.char_list[0], (x_loc, y_loc))
+        self.player.draw_player()
 
 
         # for i in range(len(self.char_list)):
@@ -128,13 +135,17 @@ class Game:
 
         pg.display.flip()
 
+        self.update()
+
     def events(self):
         # game loop events
+
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 if self.playing:
                     self.playing = False
                 self.running = False
+            
 
     def run(self):
 

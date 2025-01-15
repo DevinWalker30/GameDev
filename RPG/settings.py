@@ -22,7 +22,7 @@ GRAVITY = 1
 
 
 LAYOUTS = [['1111111111111111111',
-            '1gp ww g    g    g1',
+            '1gg ww g    g    g1',
             '1   g w f         1',
             '1  g   w  g   f   1',
             '1    ff wwww g   g1',
