@@ -1,5 +1,5 @@
 from settings import *
-from sprites import spriteSheet, Player
+from sprites import spriteSheet, Player, Wall
 import pygame as pg
 import math
 import random
@@ -78,16 +78,22 @@ class Game:
         self.char_list.append(self.char_rifle)
         self.char_list.append(self.char_uzi)
 
-        self.player = Player(self.charx, self.chary, self.screen, self.char_list)
 
     def new(self):
         # create all game objects (sprites, groups)
         # call run() method
-        
+    
+        self.wall_sprites = pg.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
+
+        self.player = Player(self.charx, self.chary, self.screen, self.char_list, self)
+        self.all_sprites.add(self.player)
+
         self.run()
 
     def update(self):
         # run all updates
+
         self.player.update()
 
     def draw(self):
@@ -112,7 +118,10 @@ class Game:
                 x_loc = col*16*scale
 
                 if LAYOUTS[level_num][row][col] == '1':
-                    self.screen.blit(self.map_list[126], (x_loc, y_loc))
+                    brick = Wall(self.screen, x_loc, y_loc, self.map_list[126])
+                    self.wall_sprites.add(brick)
+                    self.all_sprites.add(brick)
+
 
                 if LAYOUTS[level_num][row][col] == ' ':
                     self.screen.blit(self.map_list[0], (x_loc, y_loc))
@@ -126,12 +135,11 @@ class Game:
                 if LAYOUTS[level_num][row][col] == 'w':
                     self.screen.blit(self.map_list[43], (x_loc, y_loc))
 
-        self.player.draw_player()
-
 
         # for i in range(len(self.char_list)):
         #     self.screen.blit(self.char_list[i], (100, 100+(i*100)))
 
+        self.all_sprites.draw(self.screen)
 
         pg.display.flip()
 

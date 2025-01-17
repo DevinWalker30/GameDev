@@ -14,10 +14,16 @@ class spriteSheet():
         return image
     
 
+class Player(pg.sprite.Sprite):
+    def __init__(self, x_loc, y_loc, display, pos, game):
+        pg.sprite.Sprite.__init__(self)
 
-class Player():
-    def __init__(self, x_loc, y_loc, display, pos):
+        self.char_index = 0
+        self.game = game
         self.pos = pos
+        self.face_up = pg.transform.rotate(pos[self.char_index], 90)
+        self.face_left = pg.transform.rotate(pos[self.char_index], 180)
+        self.face_down = pg.transform.rotate(pos[self.char_index], -90)
         self.run_up = False
         self.run_down = False
         self.run_right = False
@@ -36,9 +42,6 @@ class Player():
         self.x_velo = 2
         self.y_velo = 2
 
-    def draw_player(self):
-        self.display.blit(self.img, self.rect)
-
     def update(self):
         self.y_change = 0
         self.x_change = 0
@@ -48,19 +51,36 @@ class Player():
         if keys[pg.K_a]:
             self.x_change = -1*self.x_velo
             self.run_left = True
+            self.run_right = False
+            self.run_up = False
+            self.run_down = False
+            self.img = self.face_left
             
         if keys[pg.K_d]:
             self.x_change = self.x_velo
             self.run_right = True
+            self.run_left = False
+            self.run_up = False
+            self.run_down = False
+            self.img = self.pos[self.char_index]
 
         if keys[pg.K_w]:
             self.y_change = -1*self.y_velo
             self.run_up = True
+            self.run_right = False
+            self.run_left = False
+            self.run_down = False
+            self.img = self.face_up
 
         if keys[pg.K_s]:
             self.y_change = self.y_velo
             self.run_down = True
-            
+            self.run_up = False
+            self.run_right = False
+            self.run_left = False
+            self.img = self.face_down
+
+
         # else:
         #     self.x_change = 0
         #     if self.run_left:
@@ -76,20 +96,16 @@ class Player():
         #         self.img = self.pos[0]
         #         self.run_right = False
 
-
-        # for surface in surface_list:
-        #     if surface.rect.colliderect(self.rect.x + self.x_change, self.rect.y, self.rect.width, self.rect.height):
-        #         self.x_change = 0
-
-        #     if surface.rect.colliderect(self.rect.x, self.rect.y + y_change, self.rect.width, self.rect.height):
-        #         if self.y_velo >= 0:
-        #             y_change = surface.rect.top - self.rect.bottom
-        #             self.landed = True
-        #             self.y_velo = 0
-        #         elif self.y_velo < 0:
-        #             y_change = surface.rect.bottom - self.rect.top
-        #             self.y_velo = 0
-
             
         self.rect.x += self.x_change
         self.rect.y += self.y_change
+
+
+class Wall(pg.sprite.Sprite):
+    def __init__(self, display, x, y, img):
+        pg.sprite.Sprite.__init__(self)        
+
+        self.display = display
+        self.x = x
+        self.y = y
+        self.img = img
