@@ -1,5 +1,5 @@
 from settings import *
-from sprites import spriteSheet, Player, Wall
+from sprites import spriteSheet, Player, Wall, Token
 import pygame as pg
 import math
 import random
@@ -11,6 +11,7 @@ class Game:
         pg.init()
         pg.mixer.init()
 
+        self.char_index = 0
 
         self.screen = pg.display.set_mode([WIDTH, HEIGHT])
         self.clock = pg.time.Clock()
@@ -24,6 +25,9 @@ class Game:
 
         self.charx = 16*scale+16
         self.chary = 16*scale+16
+
+        self.tokx = random.randint(16, (len(LAYOUTS[0][0])-4)*scale*16)
+        self.toky = random.randint(16, (len(LAYOUTS[0])-4)*scale*16)
 
         self.load_imgs()
 
@@ -82,12 +86,30 @@ class Game:
     def new(self):
         # create all game objects (sprites, groups)
         # call run() method
+
     
         self.wall_sprites = pg.sprite.Group()
+        self.token_group = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
 
         self.player = Player(self.charx, self.chary, self.screen, self.char_list, self)
         self.all_sprites.add(self.player)
+
+        self.token = Token(self.screen, self.tokx, self.toky, self.map_list[93], self)
+        self.token_group.add(self.token)
+        self.all_sprites.add(self.token)
+
+
+        for row in range(len(LAYOUTS[0])):
+            y_loc = row*16*scale
+
+            for col in range(len(LAYOUTS[0][1])):
+                x_loc = col*16*scale
+
+                if LAYOUTS[level_num][row][col] == '1':
+                            brick = Wall(self.screen, x_loc, y_loc, self.map_list[126])
+                            self.wall_sprites.add(brick)
+                            self.all_sprites.add(brick)
 
         self.run()
 
@@ -98,7 +120,7 @@ class Game:
 
     def draw(self):
         # fill screen, draw objects, and flip
-        self.screen.fill(CAVE_GREY)
+        self.screen.fill(BLACK)
 
 
         # for i in range(len(self.map_list)):
@@ -116,12 +138,6 @@ class Game:
 
             for col in range(len(LAYOUTS[0][1])):
                 x_loc = col*16*scale
-
-                if LAYOUTS[level_num][row][col] == '1':
-                    brick = Wall(self.screen, x_loc, y_loc, self.map_list[126])
-                    self.wall_sprites.add(brick)
-                    self.all_sprites.add(brick)
-
 
                 if LAYOUTS[level_num][row][col] == ' ':
                     self.screen.blit(self.map_list[0], (x_loc, y_loc))
@@ -153,6 +169,7 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+
             
 
     def run(self):
