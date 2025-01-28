@@ -16,12 +16,13 @@ class spriteSheet():
     
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, x_loc, y_loc, display, pos, game):
+    def __init__(self, x_loc, y_loc, display, pos, game, map_list):
         pg.sprite.Sprite.__init__(self)
 
         self.game = game
         self.char_index = self.game.char_index
         self.pos = pos
+        self.map_list = map_list
         self.run_up = False
         self.run_down = False
         self.run_right = False
@@ -104,6 +105,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_wall('x')
         self.rect.y += self.y_change
         self.collide_with_wall('y')
+        self.collide_with_token()
 
 
     def collide_with_wall(self, dir):
@@ -130,6 +132,12 @@ class Player(pg.sprite.Sprite):
 
     def collide_with_token(self):
         hits = pg.sprite.spritecollide(self, self.game.token_group, True)
+
+        if hits:
+            self.game.token = Token(self.display, random.randint(16*scale, (len(LAYOUTS[0][0])-4)*scale*16), random.randint(16*scale, (len(LAYOUTS[0])-4)*scale*16), self.map_list[93], self.game)
+            self.game.token_group.add(self.game.token)
+            self.game.all_sprites.add(self.game.token)
+            self.game.score += 1
 
 
 

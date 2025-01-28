@@ -6,6 +6,9 @@ import random
 
 level_num = 0
 
+pg.font.init()
+font_score = pg.font.SysFont('georgia', 32)
+
 class Game:
     def __init__(self):
         pg.init()
@@ -26,8 +29,10 @@ class Game:
         self.charx = 16*scale+16
         self.chary = 16*scale+16
 
-        self.tokx = random.randint(16, (len(LAYOUTS[0][0])-4)*scale*16)
-        self.toky = random.randint(16, (len(LAYOUTS[0])-4)*scale*16)
+        self.tokx = random.randint(16*scale, (len(LAYOUTS[0][0])-4)*scale*16)
+        self.toky = random.randint(16*scale, (len(LAYOUTS[0])-4)*scale*16)
+
+        self.score = 0
 
         self.load_imgs()
 
@@ -92,7 +97,7 @@ class Game:
         self.token_group = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
 
-        self.player = Player(self.charx, self.chary, self.screen, self.char_list, self)
+        self.player = Player(self.charx, self.chary, self.screen, self.char_list, self, self.map_list)
         self.all_sprites.add(self.player)
 
         self.token = Token(self.screen, self.tokx, self.toky, self.map_list[93], self)
@@ -155,6 +160,9 @@ class Game:
         # for i in range(len(self.char_list)):
         #     self.screen.blit(self.char_list[i], (100, 100+(i*100)))
 
+        # text_score = font_score.render(f'Score: {self.score}', True, WHITE)
+        # self.screen.blit(text_score, (WIDTH/2, HEIGHT/2))
+        self.screen.blit(self.char_uzi, (WIDTH/2, HEIGHT/2))
         self.all_sprites.draw(self.screen)
 
         pg.display.flip()
