@@ -71,6 +71,8 @@ class Game:
         self.char_holding = char_sheet.get_img(53*5-1, 43, 43, 43)
         self.char_up = char_sheet.get_img(57*6+7, 0, 39, 43)
         self.char_down = char_sheet.get_img(57*6+11, 43*3+3, 33, 43)
+
+        self.zom_up = char_sheet.get_img(57*7.5, 0, 33, 43)
         
         
         self.char_uzi.set_colorkey(BLACK)
@@ -79,6 +81,8 @@ class Game:
         self.char_holding.set_colorkey(BLACK)
         self.char_up.set_colorkey(BLACK)
         self.char_down.set_colorkey(BLACK)
+
+        self.zom_up.set_colorkey(BLACK)
 
         self.char_list.append(self.char_down)
         self.char_list.append(self.char_up)
@@ -162,7 +166,6 @@ class Game:
 
         # text_score = font_score.render(f'Score: {self.score}', True, WHITE)
         # self.screen.blit(text_score, (WIDTH/2, HEIGHT/2))
-        self.screen.blit(self.char_uzi, (WIDTH/2, HEIGHT/2))
         self.all_sprites.draw(self.screen)
 
         pg.display.flip()
