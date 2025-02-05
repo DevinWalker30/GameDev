@@ -21,18 +21,21 @@ CAVE_GREY = (120, 115, 115)
 GRAVITY = 1
 
 
-LAYOUTS = [['1111111111111111111',
-            '1gg ww g    g    g1',
-            '1   g w f         1',
-            '1  g   w  g   f   1',
-            '1    ff wwww g   g1',
-            '1 g  f   g   wf   1',
-            '1  g   g    g wg  1',
-            '1   g   g    g  w 1',
-            '1 g  g     f    w 1',
-            '1 g     g      gw 1',
-            '1   g       g  w  1',
-            '1111111111111111111']]
+LAYOUTS = [['111111111111111111111111111',
+            '1gg ww g    g    g   gg  f1',
+            '1   g w f  w   w  w   w gg1',
+            '1  g   w  g   f   gg w g f1',
+            '1    ff wwww g      gf w g1',
+            '1 g  f   g   wf   ff  g w 1',
+            '1  g   g    g wg  ggf  wg 1',
+            '1   g   g    g  w   gg f g1',
+            '1 g  g     f    w  g  w fg1',
+            '1 g f   g      gw w g     1',
+            '1   g   f   g    fwg w ww 1',
+            '111111111111111111111111111']]
 
-WIDTH = (len(LAYOUTS[0][0])-3)*scale*16
+WIDTH = (len(LAYOUTS[0][0])-10)*scale*16
 HEIGHT = (len(LAYOUTS[0])-3)*scale*16
+
+MAP_WIDTH = len(LAYOUTS[0][0])*scale*16
+MAP_HEIGHT = len(LAYOUTS[0])*scale*16

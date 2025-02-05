@@ -134,14 +134,23 @@ class Player(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.token_group, True)
 
         if hits:
-            self.game.token = Token(self.display, random.randint(16*scale, (len(LAYOUTS[0][0])-4)*scale*16), random.randint(16*scale, (len(LAYOUTS[0])-4)*scale*16), self.map_list[93], self.game)
+            self.game.token = Token(self.display, random.randint(16*scale, (len(LAYOUTS[0][0])-1)*scale*16), random.randint(16*scale, (len(LAYOUTS[0])-1)*scale*16), self.map_list[93], self.game)
             self.game.token_group.add(self.game.token)
             self.game.all_sprites.add(self.game.token)
             self.game.score += 1
 
 
-
 class Wall(pg.sprite.Sprite):
+    def __init__(self, display, x, y, img):
+        pg.sprite.Sprite.__init__(self)        
+
+        self.display = display
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+class Background(pg.sprite.Sprite):
     def __init__(self, display, x, y, img):
         pg.sprite.Sprite.__init__(self)        
 
@@ -163,3 +172,39 @@ class Token(pg.sprite.Sprite):
         self.display = display
         self.image.set_colorkey(BLACK)
         self.image = pg.transform.scale(img, (self.rect.width/self.game.scale*2, self.rect.height/self.game.scale*2))
+
+class Camera:
+
+    def __init__(self, width, height):
+        self.camera = pg.Rect(0, 0, width, height)
+        self.width = width
+        self.height = height
+
+    def get_view(self, sprite_object):
+        return sprite_object.rect.move(self.camera.topleft)
+    
+    def update(self, target):
+        x = -target.rect.x + WIDTH // 2
+        y = -target.rect.y + HEIGHT // 2
+
+        x = min(0, x)
+        y = min(0, y)
+
+        x = max(-1*(self.width - WIDTH), x)
+        y = max(-1*(self.height - HEIGHT), y)
+
+        self.camera = pg.Rect(x, y, self.width, self.height)
+
+class Enemy(pg.sprite.Sprite):
+    def __init__(self, x_loc, y_loc, display, img, game):
+        pg.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = x_loc
+        self.rect.y = y_loc
+        self.display = display
+        self.game = game
+
+
+

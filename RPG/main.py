@@ -1,5 +1,5 @@
 from settings import *
-from sprites import spriteSheet, Player, Wall, Token
+from sprites import spriteSheet, Player, Wall, Token, Camera, Background, Enemy
 import pygame as pg
 import math
 import random
@@ -98,15 +98,9 @@ class Game:
 
     
         self.wall_sprites = pg.sprite.Group()
+        self.player_group = pg.sprite.Group()
         self.token_group = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
-
-        self.player = Player(self.charx, self.chary, self.screen, self.char_list, self, self.map_list)
-        self.all_sprites.add(self.player)
-
-        self.token = Token(self.screen, self.tokx, self.toky, self.map_list[93], self)
-        self.token_group.add(self.token)
-        self.all_sprites.add(self.token)
 
 
         for row in range(len(LAYOUTS[0])):
@@ -116,16 +110,56 @@ class Game:
                 x_loc = col*16*scale
 
                 if LAYOUTS[level_num][row][col] == '1':
-                            brick = Wall(self.screen, x_loc, y_loc, self.map_list[126])
-                            self.wall_sprites.add(brick)
-                            self.all_sprites.add(brick)
+                    brick = Wall(self.screen, x_loc, y_loc, self.map_list[126])
+                    self.wall_sprites.add(brick)
+                    self.all_sprites.add(brick)
+
+                if LAYOUTS[level_num][row][col] == ' ':
+                    grass = Background(self.screen, x_loc, y_loc, self.map_list[0])
+                    self.all_sprites.add(grass)
+
+                if LAYOUTS[level_num][row][col] == 'g':
+                    tall_grass = Background(self.screen, x_loc, y_loc, self.map_list[1])
+                    self.all_sprites.add(tall_grass)
+            
+                if LAYOUTS[level_num][row][col] == 'f':
+                    flowers = Background(self.screen, x_loc, y_loc, self.map_list[2])
+                    self.all_sprites.add(flowers)
+
+                if LAYOUTS[level_num][row][col] == 'w':
+                    walkway = Background(self.screen, x_loc, y_loc, self.map_list[43])
+                    self.all_sprites.add(walkway)
+
+        
+        self.enemy = Enemy(WIDTH//2, HEIGHT//2, self.screen, self.char_list[1], self)
+        self.all_sprites.add(self.enemy)
+
+        self.player = Player(self.charx, self.chary, self.screen, self.char_list, self, self.map_list)
+        self.player_group.add(self.player)
+        self.all_sprites.add(self.player)
+
+        self.token = Token(self.screen, self.tokx, self.toky, self.map_list[93], self)
+        self.token_group.add(self.token)
+        self.all_sprites.add(self.token)
+
+        self.game_viewer = Camera(MAP_WIDTH, MAP_HEIGHT)
 
         self.run()
 
     def update(self):
         # run all updates
 
-        self.player.update()
+        self.all_sprites.update()
+
+        self.game_viewer.update(self.player)
+
+        # self.player.update()
+        
+        # if self.score >= 10:
+        #     self.char_index = 2
+        # elif self.score >= 5:
+        #     self.char_index = 3
+        
 
     def draw(self):
         # fill screen, draw objects, and flip
@@ -142,31 +176,16 @@ class Game:
         #     elif i<12:
         #         self.screen.blit(self.map_list[i], (i*16*self.scale - (9*16*self.scale), (self.scale*48)))
 
-        for row in range(len(LAYOUTS[0])):
-            y_loc = row*16*scale
-
-            for col in range(len(LAYOUTS[0][1])):
-                x_loc = col*16*scale
-
-                if LAYOUTS[level_num][row][col] == ' ':
-                    self.screen.blit(self.map_list[0], (x_loc, y_loc))
-
-                if LAYOUTS[level_num][row][col] == 'g':
-                    self.screen.blit(self.map_list[1], (x_loc, y_loc))
-            
-                if LAYOUTS[level_num][row][col] == 'f':
-                    self.screen.blit(self.map_list[2], (x_loc, y_loc))
-
-                if LAYOUTS[level_num][row][col] == 'w':
-                    self.screen.blit(self.map_list[43], (x_loc, y_loc))
-
 
         # for i in range(len(self.char_list)):
         #     self.screen.blit(self.char_list[i], (100, 100+(i*100)))
 
         # text_score = font_score.render(f'Score: {self.score}', True, WHITE)
         # self.screen.blit(text_score, (WIDTH/2, HEIGHT/2))
-        self.all_sprites.draw(self.screen)
+        # self.all_sprites.draw(self.screen)
+
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.game_viewer.get_view(sprite))
 
         pg.display.flip()
 
