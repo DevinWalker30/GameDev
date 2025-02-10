@@ -33,6 +33,7 @@ class Game:
         self.toky = random.randint(16*scale, (len(LAYOUTS[0])-4)*scale*16)
 
         self.score = 0
+        self.deaths = 0
 
         self.load_imgs()
 
@@ -131,7 +132,7 @@ class Game:
                     self.all_sprites.add(walkway)
 
         
-        self.enemy = Enemy(WIDTH//2, HEIGHT//2, self.screen, self.char_list[1], self)
+        self.enemy = Enemy(random.randint(32*scale, (len(LAYOUTS[0][0]*16*scale))-32), random.randint(32*scale, (len(LAYOUTS[0]*16*scale))-32), self.screen, self.zom_up, self)
         self.all_sprites.add(self.enemy)
 
         self.player = Player(self.charx, self.chary, self.screen, self.char_list, self, self.map_list)

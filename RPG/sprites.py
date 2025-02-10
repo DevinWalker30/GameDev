@@ -206,5 +206,55 @@ class Enemy(pg.sprite.Sprite):
         self.display = display
         self.game = game
 
+        self.x_velo = 0
+        self.y_velo = 0
+
+    def update(self):
+        self.face_right = pg.transform.rotate(self.image, 0)
+        self.face_up = pg.transform.rotate(self.image, 90)
+        self.face_left = pg.transform.rotate(self.image, 180)
+        self.face_down = pg.transform.rotate(self.image, -90)
+
+        if ((math.floor(pg.time.get_ticks()/1000))//7 != 0) and ((math.floor(pg.time.get_ticks()/1000))%7 == 0):
+            rand_14 = random.randint(1,4)
+            if (rand_14 % 2) != 0:
+                if rand_14 == 1:
+                    self.x_velo = -1*self.x_velo
+                elif rand_14 == 3:
+                    self.x_velo = 2
+                self.y_velo = 0
+            if (rand_14 % 2) == 0:
+                if rand_14 == 2:
+                    self.y_velo = -1*self.y_velo
+                elif rand_14 == 4:
+                    self.y_velo = 2
+                self.x_velo = 0
+
+        self.rect.x += self.x_velo
+        self.collides_with_player('x')
+        self.rect.y += self.y_velo
+        self.collides_with_player('y')
+
+        # self.collides_with_player('x')
+        # self.collides_with_player('y')
 
 
+    def collides_with_player(self, dir):
+        
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.player_group, True)
+
+            if hits:
+                self.game.player = Player(self.game.charx, self.game.chary, self.game.screen, self.game.char_list, self.game, self.game.map_list)
+                self.game.player_group.add(self.game.player)
+                self.game.all_sprites.add(self.game.player)
+                self.game.deaths += 1
+
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.player_group, True)
+
+            if hits:
+                self.game.player = Player(self.game.charx, self.game.chary, self.game.screen, self.game.char_list, self.game, self.game.map_list)
+                self.game.player_group.add(self.game.player)
+                self.game.all_sprites.add(self.game.player)
+                self.game.deaths += 1
