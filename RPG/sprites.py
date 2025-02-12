@@ -215,24 +215,39 @@ class Enemy(pg.sprite.Sprite):
         self.face_left = pg.transform.rotate(self.image, 180)
         self.face_down = pg.transform.rotate(self.image, -90)
 
-        if ((math.floor(pg.time.get_ticks()/1000))//7 != 0) and ((math.floor(pg.time.get_ticks()/1000))%7 == 0):
+        self.n = 1
+
+        def random_walk():
+            self.n += 1
             rand_14 = random.randint(1,4)
+            rand_120 = random.randint(1,20)
             if (rand_14 % 2) != 0:
                 if rand_14 == 1:
-                    self.x_velo = -1*self.x_velo
-                elif rand_14 == 3:
-                    self.x_velo = 2
+                    self.x_velo = -1
+                    self.image = self.face_left
+                if rand_14 == 3:
+                    self.x_velo = 1
+                    self.image = self.face_right
                 self.y_velo = 0
             if (rand_14 % 2) == 0:
                 if rand_14 == 2:
-                    self.y_velo = -1*self.y_velo
-                elif rand_14 == 4:
-                    self.y_velo = 2
+                    self.y_velo = -1
+                    self.image = self.face_up
+                if rand_14 == 4:
+                    self.y_velo = 1
+                    self.image = self.face_down
                 self.x_velo = 0
+            if rand_120 == 5:
+                self.x_velo = 0
+                self.y_velo = 0
+
+        pg.time.set_timer(random_walk(), 5000*self.n)
 
         self.rect.x += self.x_velo
+        self.collide_with_wall('x')
         self.collides_with_player('x')
         self.rect.y += self.y_velo
+        self.collide_with_wall('y')
         self.collides_with_player('y')
 
         # self.collides_with_player('x')
@@ -258,3 +273,29 @@ class Enemy(pg.sprite.Sprite):
                 self.game.player_group.add(self.game.player)
                 self.game.all_sprites.add(self.game.player)
                 self.game.deaths += 1
+    
+    def collide_with_wall(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.wall_sprites, False)
+
+            if hits:
+                if self.x_velo > 0:
+                    self.rect.x = hits[0].rect.left - self.rect.width
+                    self.rect.x -= 5
+                if self.x_velo < 0:
+                    self.rect.x = hits[0].rect.right
+                    self.rect.x += 5
+                self.x_velo = 0
+        
+
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.wall_sprites, False)
+
+            if hits:
+                if self.y_velo > 0:
+                    self.rect.y = hits[0].rect.top - self.rect.height
+                    self.rect.y -= 5
+                if self.y_velo < 0:
+                    self.rect.y = hits[0].rect.bottom
+                    self.rect.y += 5
+                self.y_velo = 0

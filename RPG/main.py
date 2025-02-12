@@ -132,7 +132,7 @@ class Game:
                     self.all_sprites.add(walkway)
 
         
-        self.enemy = Enemy(random.randint(32*scale, (len(LAYOUTS[0][0]*16*scale))-32), random.randint(32*scale, (len(LAYOUTS[0]*16*scale))-32), self.screen, self.zom_up, self)
+        self.enemy = Enemy(random.randint(32*scale, (len(LAYOUTS[0][0]*16*scale))-(32*self.scale)), random.randint(32*scale, (len(LAYOUTS[0]*16*scale))-32), self.screen, self.zom_up, self)
         self.all_sprites.add(self.enemy)
 
         self.player = Player(self.charx, self.chary, self.screen, self.char_list, self, self.map_list)
@@ -189,6 +189,10 @@ class Game:
             self.screen.blit(sprite.image, self.game_viewer.get_view(sprite))
 
         pg.display.flip()
+        # print(math.modf((pg.time.get_ticks()/5000))[0])
+        # ((pg.time.get_ticks()/1000)%5)
+        if (math.modf((pg.time.get_ticks()/1000))[0]) == 0:
+            print('yes')
 
         self.update()
 
