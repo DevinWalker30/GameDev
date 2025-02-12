@@ -209,13 +209,13 @@ class Enemy(pg.sprite.Sprite):
         self.x_velo = 0
         self.y_velo = 0
 
+        self.n = 1
+
     def update(self):
         self.face_right = pg.transform.rotate(self.image, 0)
         self.face_up = pg.transform.rotate(self.image, 90)
         self.face_left = pg.transform.rotate(self.image, 180)
         self.face_down = pg.transform.rotate(self.image, -90)
-
-        self.n = 1
 
         def random_walk():
             self.n += 1
